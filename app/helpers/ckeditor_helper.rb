@@ -20,6 +20,8 @@ module CkeditorHelper
     options[session_key] = cookies[session_key]
     options[request_forgery_protection_token] = form_authenticity_token unless request_forgery_protection_token.nil?
     
+    options.delete nil
+    
     url_for(options)
   end
   

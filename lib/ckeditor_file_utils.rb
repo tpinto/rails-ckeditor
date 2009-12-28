@@ -39,6 +39,8 @@ module CkeditorFileUtils
   end
 
   def CkeditorFileUtils.copy_configuration
+    return # buggy code down there
+    
     # need to copy over the code if it doesn't already exist
     config_file = File.join(RAILS_ROOT, '/vendor/plugins/rails-ckeditor/public/javascripts/ckcustom.js')
     dest = File.join(RAILS_ROOT, '/public/javascripts/ckcustom.js')
