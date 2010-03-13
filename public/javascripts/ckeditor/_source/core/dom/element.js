@@ -1,5 +1,5 @@
 ﻿/*
-Copyright (c) 2003-2009, CKSource - Frederico Knabben. All rights reserved.
+Copyright (c) 2003-2010, CKSource - Frederico Knabben. All rights reserved.
 For licensing, see LICENSE.html or http://ckeditor.com/license
 */
 
@@ -243,10 +243,13 @@ CKEDITOR.tools.extend( CKEDITOR.dom.element.prototype,
 				lastChild = lastChild.getPrevious();
 			if ( !lastChild || !lastChild.is || !lastChild.is( 'br' ) )
 			{
-				this.append(
-					CKEDITOR.env.opera ?
+				var bogus = CKEDITOR.env.opera ?
 						this.getDocument().createText('') :
-						this.getDocument().createElement( 'br' ) );
+						this.getDocument().createElement( 'br' );
+
+				CKEDITOR.env.gecko && bogus.setAttribute( 'type', '_moz' );
+
+				this.append( bogus );
 			}
 		},
 
@@ -256,15 +259,15 @@ CKEDITOR.tools.extend( CKEDITOR.dom.element.prototype,
 		 * @param {CKEDITOR.dom.element} parent The anscestor element to get broken.
 		 * @example
 		 * // Before breaking:
-		 * //     <b>This <i>is some<span /> sample</i> test text</b>
-		 * // If "element" is <span /> and "parent" is <i>:
-		 * //     <b>This <i>is some</i><span /><i> sample</i> test text</b>
+		 * //     &lt;b&gt;This &lt;i&gt;is some&lt;span /&gt; sample&lt;/i&gt; test text&lt;/b&gt;
+		 * // If "element" is &lt;span /&gt; and "parent" is &lt;i&gt;:
+		 * //     &lt;b&gt;This &lt;i&gt;is some&lt;/i&gt;&lt;span /&gt;&lt;i&gt; sample&lt;/i&gt; test text&lt;/b&gt;
 		 * element.breakParent( parent );
 		 * @example
 		 * // Before breaking:
-		 * //     <b>This <i>is some<span /> sample</i> test text</b>
-		 * // If "element" is <span /> and "parent" is <b>:
-		 * //     <b>This <i>is some</i></b><span /><b><i> sample</i> test text</b>
+		 * //     &lt;b&gt;This &lt;i&gt;is some&lt;span /&gt; sample&lt;/i&gt; test text&lt;/b&gt;
+		 * // If "element" is &lt;span /&gt; and "parent" is &lt;b&gt;:
+		 * //     &lt;b&gt;This &lt;i&gt;is some&lt;/i&gt;&lt;/b&gt;&lt;span /&gt;&lt;b&gt;&lt;i&gt; sample&lt;/i&gt; test text&lt;/b&gt;
 		 * element.breakParent( parent );
 		 */
 		breakParent : function( parent )
@@ -328,7 +331,9 @@ CKEDITOR.tools.extend( CKEDITOR.dom.element.prototype,
 		 */
 		getHtml : function()
 		{
-			return this.$.innerHTML;
+			var retval = this.$.innerHTML;
+			// Strip <?xml:namespace> tags in IE. (#3341).
+			return CKEDITOR.env.ie ? retval.replace( /<\?[^>]*>/g, '' ) : retval;
 		},
 
 		getOuterHtml : function()
@@ -616,7 +621,6 @@ CKEDITOR.tools.extend( CKEDITOR.dom.element.prototype,
 			}
 
 			return (
-			/** @ignore */
 			this.getName = function()
 				{
 					return nodeName;
@@ -987,8 +991,16 @@ CKEDITOR.tools.extend( CKEDITOR.dom.element.prototype,
 
 		removeAttributes : function ( attributes )
 		{
-			for ( var i = 0 ; i < attributes.length ; i++ )
-				this.removeAttribute( attributes[ i ] );
+			if ( CKEDITOR.tools.isArray( attributes ) )
+			{
+				for ( var i = 0 ; i < attributes.length ; i++ )
+					this.removeAttribute( attributes[ i ] );
+			}
+			else
+			{
+				for ( var attr in attributes )
+					attributes.hasOwnProperty( attr ) && this.removeAttribute( attr );
+			}
 		},
 
 		/**
@@ -1344,7 +1356,7 @@ CKEDITOR.tools.extend( CKEDITOR.dom.element.prototype,
 				if ( attrName in skipAttributes )
 					continue;
 
-				if( attrName == 'checked' && ( attrValue = this.getAttribute( attrName ) ) )
+				if ( attrName == 'checked' && ( attrValue = this.getAttribute( attrName ) ) )
 					dest.setAttribute( attrName, attrValue );
 				// IE BUG: value attribute is never specified even if it exists.
 				else if ( attribute.specified ||

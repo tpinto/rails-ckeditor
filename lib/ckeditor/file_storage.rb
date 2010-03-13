@@ -1,6 +1,3 @@
-require 'fileutils'
-require 'tmpdir'
-
 module Ckeditor
   class CkeditorFileStorage
     UPLOAD_FOLDER = "/uploads"

@@ -1,5 +1,5 @@
 ﻿/*
-Copyright (c) 2003-2009, CKSource - Frederico Knabben. All rights reserved.
+Copyright (c) 2003-2010, CKSource - Frederico Knabben. All rights reserved.
 For licensing, see LICENSE.html or http://ckeditor.com/license
 */
 
@@ -136,7 +136,7 @@ if ( !CKEDITOR.editor )
 		{
 			element = document.getElementById( elementOrId );
 
-			if( !element )
+			if ( !element )
 				throw '[CKEDITOR.editor.appendTo] The element with id "' + elementOrId + '" was not found.';
 		}
 
