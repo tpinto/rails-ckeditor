@@ -22,7 +22,7 @@ CKEDITOR.editorConfig = function(config) {
 	//config.resize_maxWidth = 750;
 	//config.startupFocus = true;
 	// works only with en, ru, uk languages
-	config.extraPlugins = "embed,attachment";
+	config.extraPlugins = "embed"; //",attachment";
 
 	config.toolbar = 'Easy';
 

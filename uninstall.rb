@@ -1,4 +1,4 @@
-directory = File.join(RAILS_ROOT, '/vendor/plugins/rails-ckeditor/')
+directory = File.join(RAILS.root, '/vendor/plugins/rails-ckeditor/')
 
 require "#{directory}lib/ckeditor/utils"
 require "#{directory}lib/ckeditor/version"

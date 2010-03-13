@@ -36,7 +36,7 @@ class AttachmentFile < Asset
   
   def full_filename(thumbnail = nil)
     file_system_path = self.attachment_options[:path_prefix]
-    File.join(RAILS_ROOT, file_system_path, file_name_for(self.id))
+    File.join(Rails.root, file_system_path, file_name_for(self.id))
   end
   
   def file_name_for(asset = nil)

@@ -1,8 +1,8 @@
 require 'fileutils'
 
 module CkeditorFileUtils
-  CKEDITOR_INSTALL_DIRECTORY = File.join(RAILS_ROOT, '/public/javascripts/ckeditor/')
-  PLUGIN_INSTALL_DIRECTORY =  File.join(RAILS_ROOT, '/vendor/plugins/rails-ckeditor/')
+  CKEDITOR_INSTALL_DIRECTORY = File.join(Rails.root, '/public/javascripts/ckeditor/')
+  PLUGIN_INSTALL_DIRECTORY =  File.join(Rails.root, '/vendor/plugins/rails-ckeditor/')
 
   def CkeditorFileUtils.recursive_copy(options)
     source = options[:source]
@@ -31,8 +31,8 @@ module CkeditorFileUtils
   end
 
   def CkeditorFileUtils.backup_existing
-    source = File.join(RAILS_ROOT,'/public/javascripts/ckeditor')
-    dest = File.join(RAILS_ROOT,'/public/javascripts/ckeditor_bck')
+    source = File.join(Rails.root,'/public/javascripts/ckeditor')
+    dest = File.join(Rails.root,'/public/javascripts/ckeditor_bck')
 
     FileUtils.rm_r(dest) if File.exists? dest
     FileUtils.mv source, dest
@@ -42,11 +42,11 @@ module CkeditorFileUtils
     return # buggy code down there
     
     # need to copy over the code if it doesn't already exist
-    config_file = File.join(RAILS_ROOT, '/vendor/plugins/rails-ckeditor/public/javascripts/ckcustom.js')
-    dest = File.join(RAILS_ROOT, '/public/javascripts/ckcustom.js')
+    config_file = File.join(Rails.root, '/vendor/plugins/rails-ckeditor/public/javascripts/ckcustom.js')
+    dest = File.join(Rails.root, '/public/javascripts/ckcustom.js')
     
-    backup_config = File.join(RAILS_ROOT, '/public/javascripts/ckeditor/config.bak')
-    config_symlink = File.join(RAILS_ROOT, '/public/javascripts/ckeditor/config.js')
+    backup_config = File.join(Rails.root, '/public/javascripts/ckeditor/config.bak')
+    config_symlink = File.join(Rails.root, '/public/javascripts/ckeditor/config.js')
     
     FileUtils.cp(config_file, dest) unless File.exist?(dest)
     
@@ -64,12 +64,12 @@ module CkeditorFileUtils
   end
 
   def CkeditorFileUtils.create_uploads_directory
-    uploads = File.join(RAILS_ROOT, '/public/uploads')
+    uploads = File.join(Rails.root, '/public/uploads')
     FileUtils.mkdir(uploads) unless File.exist?(uploads)
   end
 
   def CkeditorFileUtils.install(log)
-    directory = File.join(RAILS_ROOT, '/vendor/plugins/rails-ckeditor/')
+    directory = File.join(Rails.root, '/vendor/plugins/rails-ckeditor/')
     source = File.join(directory,'/public/javascripts/ckeditor/')
     FileUtils.mkdir(CKEDITOR_INSTALL_DIRECTORY)
     
@@ -87,8 +87,8 @@ module CkeditorFileUtils
     if File.exist?(CKEDITOR_INSTALL_DIRECTORY)
       FileUtils.rm_r(CKEDITOR_INSTALL_DIRECTORY)
 
-      FileUtils.rm(File.join(RAILS_ROOT, '/public/javascripts/ckcustom.js')) \
-      if File.exist? File.join(RAILS_ROOT, '/public/javascripts/ckcustom.js')
+      FileUtils.rm(File.join(Rails.root, '/public/javascripts/ckcustom.js')) \
+      if File.exist? File.join(Rails.root, '/public/javascripts/ckcustom.js')
     end
   end
 

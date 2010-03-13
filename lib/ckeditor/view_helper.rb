@@ -1,8 +1,8 @@
 module Ckeditor
   PLUGIN_NAME = 'rails-ckeditor'
-  PLUGIN_PATH = File.join(RAILS_ROOT, "vendor/plugins", PLUGIN_NAME)
+  PLUGIN_PATH = File.join(Rails.root, "vendor/plugins", PLUGIN_NAME)
   
-  PLUGIN_PUBLIC_PATH = Ckeditor::Config.exists? ? Ckeditor::Config['public_path'] : "#{RAILS_ROOT}/public/uploads"
+  PLUGIN_PUBLIC_PATH = Ckeditor::Config.exists? ? Ckeditor::Config['public_path'] : "#{Rails.root}/public/uploads"
   PLUGIN_PUBLIC_URI  = Ckeditor::Config.exists? ? Ckeditor::Config['public_uri'] : "/uploads"
   
   PLUGIN_CONTROLLER_PATH = File.join(PLUGIN_PATH, "/app/controllers")
